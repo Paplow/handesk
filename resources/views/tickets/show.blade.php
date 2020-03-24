@@ -5,30 +5,14 @@
             <a href="{{ route('tickets.index') }}">{{ trans_choice('ticket.ticket', 2) }}</a>
         </div>
         <h3>#{{ $ticket->id }}. {{ $ticket->title }} </h3>
-        <div id="ticket-info" class="float-left">
-            @busy <span class="label ticket-status-{{ $ticket->statusName() }}">{{ __("ticket." . $ticket->statusName() ) }}</span> &nbsp;
-            @busy <span class="label ticket-priority-{{ $ticket->priorityName() }}">{{ __("ticket." . $ticket->priorityName() ) }}</span> &nbsp;
-            <span class="date">{{  $ticket->created_at->diffForHumans() }} · {{  $ticket->requester->name }} &lt;{{$ticket->requester->email}}&gt;</span>
-            <button class="ternary" onClick="$('#ticket-info').hide(); $('#ticket-edit').show()">@icon(pencil)</button>
-            {{--<a class="ml4" title="Public Link" href="{{route('requester.tickets.show',$ticket->public_token)}}"> @icon(globe) </a>--}}
-        </div>
-        <div id="ticket-edit" class="hidden" class="float-left">
-            {{ Form::open(["url" => route("tickets.update", $ticket) ,"method" => "PUT"]) }}
-            <select name="priority">
-                <option value="{{\App\Ticket::PRIORITY_LOW}}"  @if($ticket->priority == App\Ticket::PRIORITY_LOW) selected @endif         >{{ __("ticket.low") }}</option>
-                <option value="{{\App\Ticket::PRIORITY_NORMAL}}"  @if($ticket->priority == App\Ticket::PRIORITY_NORMAL) selected @endif   >{{ __("ticket.normal") }}</option>
-                <option value="{{\App\Ticket::PRIORITY_HIGH}}"  @if($ticket->priority == App\Ticket::PRIORITY_HIGH) selected @endif       >{{ __("ticket.high") }}</option>
-                <option value="{{\App\Ticket::PRIORITY_BLOCKER}}"  @if($ticket->priority == App\Ticket::PRIORITY_BLOCKER) selected @endif >{{ __("ticket.blocker") }}</option>
-            </select>
-            <input name="requester[name]" value="{{  $ticket->requester->name }}">
-            <input name="requester[email]" value="{{$ticket->requester->email}}">
-            <button> {{ __("ticket.update")}} </button>
-            {{ Form::close() }}
+        <div class="mb2">
+            @include('components.ticket.rating')
         </div>
 
         @include('components.ticket.actions')
-        <br>
+        @include('components.ticket.header')
         @include('components.ticket.merged')
+        <br>
     </div>
 
 
@@ -36,7 +20,7 @@
         @include('components.assignActions', ["endpoint" => "tickets", "object" => $ticket])
         <div class="comment new-comment">
             {{ Form::open(["url" => route("comments.store", $ticket) , "files" => true, "id" => "comment-form"]) }}
-            <textarea id="comment-text-area" name="body"></textarea>
+            <textarea id="comment-text-area" name="body">@if(auth()->user()->settings->tickets_signature)&#13;&#13;{{ auth()->user()->settings->tickets_signature }}@endif</textarea>
             @include('components.uploadAttachment', ["attachable" => $ticket, "type" => "tickets"])
             {{ Form::hidden('new_status', $ticket->status, ["id" => "new_status"]) }}
             @if($ticket->isEscalated() )

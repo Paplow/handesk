@@ -16,7 +16,7 @@ class TicketEventsTest extends TestCase
     use RefreshDatabase;
     protected $agent;
 
-    public function setUp() {
+    public function setUp() : void{
         parent::setup();
         $this->agent = factory(User::class)->create();
         $this->actingAs($this->agent);
@@ -77,12 +77,12 @@ class TicketEventsTest extends TestCase
     public function creating_ticket_issue_creates_a_ticket_event(){
         $ticket = factory(Ticket::class)->create();
 
-        $ticket->createIssue( new FakeIssueCreator, null );
+        $ticket->createIssue( new FakeIssueCreator, 'fake/repo' );
 
         $this->assertCount(1, $ticket->fresh()->events);
         tap($ticket->fresh()->events->first(), function($event){
             $this->assertEquals($this->agent->id, $event->user->id );
-            $this->assertEquals("Issue created #1 at ", $event->body);
+            $this->assertEquals("Issue created #1 at fake/repo", $event->body);
         });
     }
 

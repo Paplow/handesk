@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['namespace' => 'Api'], function () {
+Route::group(['namespace' => 'Api', 'middleware' => 'apiAuth'], function () {
     Route::resource('tickets', 'TicketsController', ['except' => 'destroy']);
     Route::post('tickets/{ticket}/comments', 'CommentsController@store');
     Route::post('tickets/{ticket}/assign', 'TicketAssignController@store');
@@ -11,4 +11,10 @@ Route::group(['namespace' => 'Api'], function () {
     Route::resource('leads', 'LeadsController', ['only' => 'store']);
 
     Route::resource('ideas', 'IdeasController', ['only' => ['store', 'index']]);
+});
+
+Route::post('agent/login', 'Api\AgentController@login');
+Route::group(['namespace' => 'Api', 'prefix' => 'agent', 'middleware' => 'apiAuthAgent'], function () {
+    Route::resource('tickets', 'AgentController', ['only' => 'index']);
+    Route::resource('tickets.comments', 'AgentTicketCommentsController', ['only' => ['index', 'store']]);
 });

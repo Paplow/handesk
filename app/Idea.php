@@ -3,8 +3,8 @@
 namespace App;
 
 use App\Authenticatable\Admin;
-use App\Services\IssueCreator;
 use App\Notifications\IdeaCreated;
+use App\Services\IssueCreator;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Idea extends BaseModel
@@ -99,17 +99,19 @@ class Idea extends BaseModel
             return '';
         }
 
-        return array_flip(config('issues.repositories'))[$this->repository];
+        return array_flip(config('issues.repositories'))[$this->repository] ?? $this->repository;
     }
 
     public function createIssue(IssueCreator $issueCreator)
     {
+        $repo  = explode('/', $this->repository);
         $issue = $issueCreator->createIssue(
-            $this->repository,
+            $repo[0],
+            $repo[1],
             $this->title,
             'Issue from idea: '.route('ideas.show', $this)."   \n\r".$this->body
         );
-        $this->update(['issue_id' => $issue->local_id]);
+        $this->update(['issue_id' => $issue->id]);
 
         return $issue;
     }

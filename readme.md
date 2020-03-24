@@ -6,7 +6,7 @@ have multiple teams, with multiple users, easy and efficient reporting by all/te
 
 [Landing page: http://handesk.io](http://handesk.io)
 
-Check out the screenshots to see how nice it looks, and feel fee to contribute by sending us PRs.
+Check out the screenshots to see how nice it looks, and feel free to contribute by sending us PRs.
 We will keep adding features as we need them, but our basic workflow is totally covered :D
 
 ## Features
@@ -29,6 +29,7 @@ We will keep adding features as we need them, but our basic workflow is totally 
 · Roadmap module, you can create ideas that come from your customers or your own, give them deadlines and integrate them with your repository manager,
 you can even create ideas from support tickets so you never lose track.   
 · You can also create ideas by sending an email to you support accounts starting with `Idea:` it will create an idea instead of a ticket     
+· Ticket rating, when a ticket is solved a rating email is sent to the customer (check config/handesk.php to disable it)
 
 > Follow us on twitter @codepassion to stay tuned
 
@@ -70,6 +71,13 @@ MAIL_FETCH_PORT=110
 MAIL_FETCH_USERNAME=hello@handesk.com   
 MAIL_FETCH_PASSWORD=secret-password   
 ````
+
+### Sidebar
+You can toggle the visibility of `leads` and `ideas` in the `config/handesk.php` file.
+```
+'leads'    => env('HANDESK_LEADS_ENABLED', true),
+'roadmap'  => env('HANDESK_ROADMAP_ENABLED', true),
+```
 
 #### Mailchimp
 Set your mailchimp key in .env
@@ -114,7 +122,7 @@ There is the `badchoice/handesk-php` package in packagist to easily talk with th
 
 ## Community
 We have a slack channel at [https://handesk.slack.com/](https://handesk.slack.com)
-And you can join with the following [invitation](https://handesk.slack.com/shared_invite/enQtMzQwMTg5ODkwNDUxLWVhYjFkNzNkMmE2NWUxYjcwZTNhMmM0M2M3NmVkMzdhNWI0NTU0ZGM0ODFlNTVlMGZhMTA0YzM0YjA3NjcxMTc)
+And you can join with the following [invitation](https://join.slack.com/t/handesk/shared_invite/enQtMzg4MzE4ODcwNzg2LTlmZTk4NGRjZDA5N2ExYTI2ZDhhNzAyOThmMDM1YjgwZTMzZTQ5ZjkxNDVlNzIwY2ZkZWExN2U2NDUwNWFiOWU)
 
 Join in with the following link
 
@@ -128,3 +136,4 @@ We try to follow a TDD approach as well as some mixed functional CSS for the fro
 ## License
 Handesk is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT). 
 
+Special thanks to [Jetbrains](https://www.jetbrains.com) for their support to open source projects!
